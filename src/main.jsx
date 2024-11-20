@@ -1,4 +1,8 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./styles/global.css";
+import Rotas from "./rotas.jsx"
 
-createRoot(document.getElementById("root")).render(<h1>Hello World</h1>);
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <Rotas />
+)
