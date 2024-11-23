@@ -17,15 +17,16 @@ function Login() {
         setMsg("");
 
         try {
-            const response = await api.post("/users/login", { email, password });
+            const response = await api.post("/admin/login", { email, password });
 
             if (response.data) {
+                //localStorage.setItem("authToken", token);
                 localStorage.setItem("sessionToken", response.data.token);
-                localStorage.setItem("sessionId", response.data.id_user);
+                localStorage.setItem("sessionId", response.data.id_admin);
                 localStorage.setItem("sessionEmail", response.data.email);
                 localStorage.setItem("sessionName", response.data.name);
-                api.defaults.headers.common['Authorization'] = "Bearer" + response.data.token;
-                navigate("/appointments");
+                api.defaults.headers.common['Authorization'] = "Bearer " + response.data.token;
+                navigate("/admin/appointments");
             } else {
                 console.log(response);
             }
@@ -51,7 +52,7 @@ function Login() {
                         placeholder="E-mail"
                         className="form-control"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Atualiza o estado
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
 

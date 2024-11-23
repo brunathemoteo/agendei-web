@@ -1,20 +1,45 @@
 import Navbar from "../../components/navbar/navbar.jsx";
 import "./appointments.css"
 import { Link, useNavigate } from "react-router-dom";
-import { appointments, doctors } from "../../constants/data.js";
+import { doctors } from "../../constants/data.js";
 import Appointment from "../../components/appointment/appointment.jsx";
+import { useEffect, useState } from "react";
+import api from "../../constants/api.js";
 
 function Appointments() {
 
     const navigate = useNavigate();
+    const [appointments, setAppointments] = useState([]);
 
     function ClickEdit(id_appointment) {
-        navigate("/appointments/edit/" + id_appointment);
+        navigate("/admin/appointments/" + id_appointment);
     }
 
     function ClickDelete(id_appointment) {
         console.log("Excluir" + id_appointment);
     }
+
+    async function LoadAppointments() {
+        try {
+            const response = await api.get("/admin/appointments");
+
+            if (response.data) {
+                setAppointments(response.data);
+            }
+        } catch (error) {
+            if (error.response?.data.error) {
+                if (error.response.status == 401) {
+                    return navigate("/");
+                }
+            }
+            else
+                alert("Erro ao buscar agendamentos. Tente novamente mais tarde.")
+        }
+    }
+
+    useEffect(() => {
+        LoadAppointments();
+    }, []);
 
     return <div className="container-fluid mt-page">
         <Navbar />
@@ -44,7 +69,7 @@ function Appointments() {
 
                     </select>
                 </div>
-                <button className="btn btn-primary">Filtrar</button>
+                <button className="btn btn-primary" type="button">Filtrar</button>
             </div>
         </div>
 
@@ -65,7 +90,7 @@ function Appointments() {
                         appointments.map((ap) => {
                             return <Appointment key={ap.id_appointment}
                                 id_appointment={ap.id_appointment}
-                                user={ap.user}
+                                user={ap.name}
                                 doctor={ap.doctor}
                                 service={ap.service}
                                 booking_date={ap.booking_date}
