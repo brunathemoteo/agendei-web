@@ -1,8 +1,7 @@
 import Navbar from "../../components/navbar/navbar.jsx";
 import "./doctors.css"
 import { Link, useNavigate } from "react-router-dom";
-import { appointments, doctors } from "../../constants/data.js";
-import Appointment from "../../components/appointment/appointment.jsx";
+import { doctors } from "../../constants/data.js";
 import Doctor from "../../components/doctor/doctor.jsx";
 
 function Doctors() {
