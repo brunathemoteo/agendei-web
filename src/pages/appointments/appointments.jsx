@@ -1,7 +1,6 @@
 import Navbar from "../../components/navbar/navbar.jsx";
 import "./appointments.css";
 import { Link, useNavigate } from "react-router-dom";
-import { doctors } from "../../constants/data.js";
 import Appointment from "../../components/appointment/appointment.jsx";
 import { useEffect, useState, useMemo } from "react";
 import api from "../../constants/api.js";
@@ -9,6 +8,7 @@ import api from "../../constants/api.js";
 function Appointments() {
     const navigate = useNavigate();
     const [appointments, setAppointments] = useState([]);
+    const [doctors, setDoctors] = useState([]); // <--- estado dos médicos
     const [page, setPage] = useState(1);
     const limit = 10;
     const [total, setTotal] = useState(0);
@@ -19,6 +19,19 @@ function Appointments() {
     const [endDate, setEndDate] = useState(localStorage.getItem("endDate") || "");
     const [doctorId, setDoctorId] = useState(localStorage.getItem("doctorId") || "");
     const [loading, setLoading] = useState(false);
+
+    // Carrega médicos do backend quando o componente monta
+    useEffect(() => {
+        async function loadDoctors() {
+            try {
+                const response = await api.get("/doctors");
+                setDoctors(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar médicos", error);
+            }
+        }
+        loadDoctors();
+    }, []);
 
     useEffect(() => {
         localStorage.setItem("startDate", startDate);
